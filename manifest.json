@@ -1,0 +1,36 @@
+{
+    "manifest_version": 3,
+    "name": "AIEverywhere",
+    "version": "1.0",
+    "description": "Integrate OpenAI's ChatGPT directly into your browser!",
+    "permissions": [
+        "contextMenus",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "*://api.openai.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon16.png",
+            "48": "icon48.png"
+        }
+    },
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    }
+}
