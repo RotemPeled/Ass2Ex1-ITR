@@ -1,17 +1,21 @@
 const OPENAI_API_KEY = 'sk-proj-SRGCSAzogrcsQIu2kwiZT3BlbkFJp02fsLG6iUdA7G5kEfKg';
+chrome.contextMenus.create({
+    id: "aieverywhere",
+    title: "AIEverywhere",
+    contexts: ["selection"]
+});
 
 chrome.runtime.onInstalled.addListener(function() {
-    // Create the main context menu
-    chrome.contextMenus.create({
-        id: "aieverywhere",
-        title: "AIEverywhere",
-        contexts: ["selection"]
-    });
-
-    // Create the "Improve English" submenu item
+    // Create submenu items
     chrome.contextMenus.create({
         id: "improve-english",
         title: "Improve English",
+        parentId: "aieverywhere",
+        contexts: ["selection"]
+    });
+    chrome.contextMenus.create({
+        id: "improve-english-creative",
+        title: "Improve English - Creative",
         parentId: "aieverywhere",
         contexts: ["selection"]
     });
@@ -19,12 +23,21 @@ chrome.runtime.onInstalled.addListener(function() {
 
 // Listen for clicks on the context menu
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    if (info.menuItemId === "improve-english") {
+    if (info.menuItemId === "improve-english" || info.menuItemId === "improve-english-creative") {
         if (!info.selectionText) {
             console.error('No text selected');
             return;
         }
-        // Call OpenAI API to improve the English of the selected text using the chat model
+
+        let systemMessage = "Rewrite the following to correct grammar, spelling, and clarity.";
+        let temperature = 0;
+
+        if (info.menuItemId === "improve-english-creative") {
+            systemMessage += " Make it creative and slightly unusual.";
+            temperature = 0.7; // Adjusted for creative output
+        }
+
+        // Call OpenAI API to improve the English of the selected text
         fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -32,14 +45,15 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 'Authorization': `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo",  // Updated model to gpt-3.5-turbo
+                model: "gpt-3.5-turbo",
                 messages: [{
                     role: "system",
-                    content: "Rewrite the following to correct grammar, spelling, and clarity."
+                    content: systemMessage
                 },{
                     role: "user",
                     content: info.selectionText
-                }]
+                }],
+                temperature: temperature
             })
         })
         .then(res => res.json())
@@ -52,10 +66,10 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             chrome.windows.create({
                 url: "popup.html",
                 type: "popup",
-                width: 600, // Adjusted width for better readability
-                height: 400, // Adjusted height to accommodate more content
-                left: 100, // Optional: position from left of screen
-                top: 100  // Optional: position from top of screen
+                width: 600,
+                height: 400,
+                left: 100,
+                top: 100
             }, function(window) {
                 setTimeout(() => {
                     chrome.runtime.sendMessage({
