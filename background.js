@@ -32,7 +32,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 'Authorization': `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-4",  // Ensure this is a chat-compatible model
+                model: "gpt-3.5-turbo",  // Updated model to gpt-3.5-turbo
                 messages: [{
                     role: "system",
                     content: "Rewrite the following to correct grammar, spelling, and clarity."
@@ -44,7 +44,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
         })
         .then(res => res.json())
         .then(data => {
-            if (!data.choices || data.choices.length === 0) {
+            if (!data.choices || data.choices.length == 0) {
                 console.error('API returned no choices or error:', JSON.stringify(data));
                 return;
             }
@@ -52,8 +52,10 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             chrome.windows.create({
                 url: "popup.html",
                 type: "popup",
-                width: 420,
-                height: 250
+                width: 600, // Adjusted width for better readability
+                height: 400, // Adjusted height to accommodate more content
+                left: 100, // Optional: position from left of screen
+                top: 100  // Optional: position from top of screen
             }, function(window) {
                 setTimeout(() => {
                     chrome.runtime.sendMessage({
