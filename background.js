@@ -26,6 +26,12 @@ chrome.runtime.onInstalled.addListener(function() {
         parentId: "aieverywhere",
         contexts: ["selection"]
     });
+    chrome.contextMenus.create({
+        id: "summarize-single-paragraph",
+        title: "Summarize to a Single Paragraph",
+        parentId: "aieverywhere",
+        contexts: ["selection"]
+    });
 });
 
 // Function to handle API calls
@@ -65,18 +71,27 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
         console.error('No text selected');
         return;
     }
-    if (info.menuItemId === "improve-english") {
-        callOpenAiApi("Rewrite the following to correct grammar, spelling, and clarity.", info.selectionText, 0, function(response) {
-            showResponseInPopup(response, "Improve English");
-        });
-    } else if (info.menuItemId === "improve-english-creative") {
-        callOpenAiApi("Rewrite the following to correct grammar, spelling, and clarity. Make it creative and slightly unusual.", info.selectionText, 0.7, function(response) {
-            showResponseInPopup(response, "Improve English - Creative");
-        });
-    } else if (info.menuItemId === "add-comments-to-code") {
-        callOpenAiApi("Is this text a code? 1. if the answer is yes, return only the code after you added comments to it. do not add the words - \"This is a code\" 2.If not, please return only the words - \"This is not a code.\"", info.selectionText, 0, function(response) {
-            showResponseInPopup(response, "Add Comments to Code");
-        });
+    switch (info.menuItemId) {
+        case "improve-english":
+            callOpenAiApi("You are an English teacher. Rewrite the following to correct grammar, spelling, and clarity.", info.selectionText, 0, function(response) {
+                showResponseInPopup(response, "Improve English");
+            });
+            break;
+        case "improve-english-creative":
+            callOpenAiApi("You are an English teacher. Rewrite the following to correct grammar, spelling, and clarity. Make it creative and slightly unusual.", info.selectionText, 0.7, function(response) {
+                showResponseInPopup(response, "Improve English - Creative");
+            });
+            break;
+        case "add-comments-to-code":
+            callOpenAiApi("You are an expert code commentator. First, determine if the given text is a code snippet or not. If it is code, return exactly the same code and add relevant comments to it. If it is not code, respond with the message: This text is not code.", info.selectionText, 0, function(response) {
+                showResponseInPopup(response, "Add Comments to Code");
+            });
+            break;
+        case "summarize-single-paragraph":
+            callOpenAiApi("You are a summarization assistant. Summarize the following text into a single paragraph.", info.selectionText, 0, function(response) {
+                showResponseInPopup(response, "Summarize to a Single Paragraph");
+            });
+            break;
     }
 });
 
