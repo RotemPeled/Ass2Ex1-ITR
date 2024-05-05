@@ -35,6 +35,12 @@ function setupContextMenus() {
             parentId: "aieverywhere",
             contexts: ["selection"]
         });
+        chrome.contextMenus.create({
+            id: "ai-quiz",
+            title: "AI Quiz",
+            parentId: "aieverywhere",
+            contexts: ["selection"]
+        });
     });
 }
 
@@ -97,6 +103,11 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
         case "summarize-single-paragraph":
             callOpenAiApi("You are a summarization assistant. Summarize the following text into a single paragraph.", info.selectionText, 0, function(response) {
                 showResponseInPopup(response, "Summarize to a Single Paragraph");
+            });
+            break;
+        case "ai-quiz":
+            callOpenAiApi("You are an expert in creating educational content. Generate 10 multiple-choice questions about the following text. Each question should have four options, marked A, B, C, and D. Please clearly indicate which option is correct by placing an asterisk (*) next to the correct answer.", info.selectionText, 0, function(response) {
+                showResponseInPopup(response, "AI Quiz");
             });
             break;
     }
