@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Setup listener for messages from the background script
+    const urlParams = new URLSearchParams(window.location.search);
+    const title = urlParams.get('title');
+    document.getElementById('title').textContent = title;
+
     chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         if (message.action === "showImprovedText") {
-                var improvedTextElement = document.getElementById('improvedText');
+            var improvedTextElement = document.getElementById('improvedText');
             if (improvedTextElement) {
                 improvedTextElement.value = message.text;
             } else {
