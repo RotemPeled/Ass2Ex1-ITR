@@ -1,38 +1,45 @@
 const OPENAI_API_KEY = 'sk-proj-SRGCSAzogrcsQIu2kwiZT3BlbkFJp02fsLG6iUdA7G5kEfKg';
 
-chrome.contextMenus.create({
-    id: "aieverywhere",
-    title: "AIEverywhere",
-    contexts: ["selection"]
-});
+// Function to setup context menus
+function setupContextMenus() {
+    chrome.contextMenus.removeAll(function() {
+        // Create parent menu item
+        chrome.contextMenus.create({
+            id: "aieverywhere",
+            title: "AIEverywhere",
+            contexts: ["selection"]
+        });
 
-chrome.runtime.onInstalled.addListener(function() {
-    // Create submenu items
-    chrome.contextMenus.create({
-        id: "improve-english",
-        title: "Improve English",
-        parentId: "aieverywhere",
-        contexts: ["selection"]
+        // Create submenu items
+        chrome.contextMenus.create({
+            id: "improve-english",
+            title: "Improve English",
+            parentId: "aieverywhere",
+            contexts: ["selection"]
+        });
+        chrome.contextMenus.create({
+            id: "improve-english-creative",
+            title: "Improve English - Creative",
+            parentId: "aieverywhere",
+            contexts: ["selection"]
+        });
+        chrome.contextMenus.create({
+            id: "add-comments-to-code",
+            title: "Add Comments to Code",
+            parentId: "aieverywhere",
+            contexts: ["selection"]
+        });
+        chrome.contextMenus.create({
+            id: "summarize-single-paragraph",
+            title: "Summarize to a Single Paragraph",
+            parentId: "aieverywhere",
+            contexts: ["selection"]
+        });
     });
-    chrome.contextMenus.create({
-        id: "improve-english-creative",
-        title: "Improve English - Creative",
-        parentId: "aieverywhere",
-        contexts: ["selection"]
-    });
-    chrome.contextMenus.create({
-        id: "add-comments-to-code",
-        title: "Add Comments to Code",
-        parentId: "aieverywhere",
-        contexts: ["selection"]
-    });
-    chrome.contextMenus.create({
-        id: "summarize-single-paragraph",
-        title: "Summarize to a Single Paragraph",
-        parentId: "aieverywhere",
-        contexts: ["selection"]
-    });
-});
+}
+
+// Call setup function on extension load or reload
+setupContextMenus();
 
 // Function to handle API calls
 function callOpenAiApi(systemMessage, userInput, temperature, callback) {
