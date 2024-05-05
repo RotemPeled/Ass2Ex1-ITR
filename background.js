@@ -106,7 +106,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             });
             break;
         case "ai-quiz":
-            callOpenAiApi("You are an expert in creating educational content. Generate 10 multiple-choice questions about the following text. Each question should have four options, marked A, B, C, and D. Please clearly indicate which option is correct by placing an asterisk (*) next to the correct answer.", info.selectionText, 0, function(response) {
+            callOpenAiApi("Generate a quiz with 10 multiple-choice questions (with 4 options each) and add '-correct' to the relevant answer based on the following text.", info.selectionText, 0, function(response) {
                 showResponseInPopup(response, "AI Quiz");
             });
             break;

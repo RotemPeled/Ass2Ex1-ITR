@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AI Everywher</title>
+    <title>AI Everywhere</title>
     <style>
         body, html {
             margin: 0;
@@ -10,29 +10,32 @@
             height: 100%;
             overflow: hidden; /* Prevent scroll on body */
         }
-        textarea, h1 {
+        #improvedText {
             width: 100%;
+            height: calc(100% - 30px);
             padding: 10px;
             margin: 0;
-            box-sizing: border-box; /* Include padding in width and height */
-        }
-        textarea {
-            height: calc(100% - 30px); /* Adjust height to account for h1 */
+            box-sizing: border-box;
             border: none;
-            resize: none; /* Disable resizing */
             font-family: Arial, sans-serif;
             font-size: 16px;
+            overflow: auto; /* Allow scrolling */
+            white-space: pre-wrap; /* Keep formatting */
         }
         h1 {
             font-family: Arial, sans-serif;
             font-size: 18px;
             text-align: center;
         }
+        .correct-answer {
+            font-weight: bold;
+            color: green;
+        }
     </style>
 </head>
 <body>
     <h1 id="title"></h1>
-    <textarea id="improvedText" readonly></textarea>
+    <div id="improvedText" readonly></div>
     <script src="popup.js"></script>
 </body>
 </html>
