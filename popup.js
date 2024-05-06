@@ -7,9 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (message.action === "showImprovedText") {
             var improvedTextElement = document.getElementById('improvedText');
             if (improvedTextElement) {
-                // Process the text to format correct answers
                 var formattedText = formatQuizResponse(message.text);
-                improvedTextElement.innerHTML = formattedText; // Use innerHTML instead of value
+                improvedTextElement.innerHTML = formattedText; // Use innerHTML to inject formatted HTML
             } else {
                 console.error('No element with ID "improvedText" found.');
             }
@@ -18,17 +17,29 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function formatQuizResponse(text) {
-    // Split the response into lines
+    console.log("Original text:", text); // Debug: log original text
     var lines = text.split('\n');
-    for (let i = 0; i < lines.length; i++) {
-        // Check if the line contains '-correct'
-        if (lines[i].includes('-correct')) {
-            // Remove '-correct' from the line
-            lines[i] = lines[i].replace('-correct', '');
-            // Apply HTML formatting for bold and green color
-            lines[i] = '<span class="correct-answer">' + lines[i] + '</span>';
+    var formattedLines = [];
+    var isTenthQuestion = false; // Flag to track if processing the 10th question
+    lines.forEach((line, index) => {
+        // Check for correct answer marker and apply formatting
+        if (line.includes('- correct')) {
+            line = line.replace('- correct', ''); // Remove marker
+            if (isTenthQuestion) {
+                line = '    <span class="correct-answer">' + line.trim() + '</span>'; // Apply formatting with 4 spaces
+            } else {
+                line = '   <span class="correct-answer">' + line.trim() + '</span>'; // Apply formatting with 3 spaces
+            }
         }
-    }
-    // Join the lines back into a single string
-    return lines.join('\n');
+        // Check if the line represents the 10th question
+        if (line.trim().startsWith('10.')) {
+            isTenthQuestion = true;
+        }
+        formattedLines.push(line);
+    });
+    var formattedText = formattedLines.join('\n');
+    console.log("Formatted text:", formattedText); // Debug: log formatted text
+    return formattedText;
 }
+
+

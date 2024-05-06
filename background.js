@@ -105,11 +105,12 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 showResponseInPopup(response, "Summarize to a Single Paragraph");
             });
             break;
-        case "ai-quiz":
-            callOpenAiApi("Generate a quiz with 10 multiple-choice questions (with 4 options each) and add '-correct' to the relevant answer based on the following text.", info.selectionText, 0, function(response) {
-                showResponseInPopup(response, "AI Quiz");
-            });
-            break;
+            case "ai-quiz":
+                callOpenAiApi("Given the text: {userInput}, generate 10 multiple-choice questions with four options each (labeled A, B, C, D) and identify the correct answer for each. Format the output as follows:\n\n1. Question: <Question 1>\n   A. Option 1 - correct\n   B. Option 2\n   C. Option 3\n   D. Option 4\n\n...continue this exact pattern through question 10.", info.selectionText, 0, function(response) {
+                    showResponseInPopup(response, "AI Quiz");
+                });
+                break;
+            
     }
 });
 
@@ -126,7 +127,7 @@ function showResponseInPopup(text, title) {
             chrome.runtime.sendMessage({
                 action: "showImprovedText",
                 text: text,
-                title: title  // Pass the title
+                title: title
             });
         }, 100);
     });
