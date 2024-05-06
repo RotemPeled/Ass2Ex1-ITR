@@ -105,16 +105,24 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 showResponseInPopup(response, "Summarize to a Single Paragraph");
             });
             break;
-            case "ai-quiz":
-                callOpenAiApi("Given the text: {userInput}, generate 10 multiple-choice questions with four options each (labeled A, B, C, D) and identify the correct answer for each. Format the output as follows:\n\n1. Question: <Question 1>\n   A. Option 1 - correct\n   B. Option 2\n   C. Option 3\n   D. Option 4\n\n...continue this exact pattern through question 10.", info.selectionText, 0, function(response) {
-                    showResponseInPopup(response, "AI Quiz");
-                });
-                break;
-            
+        case "ai-quiz":
+            callOpenAiApi(`Given the text: "${info.selectionText}", generate 10 multiple-choice questions with four options each (labeled A, B, C, D) and identify the correct answer for each. Format the output as follows:
+
+        1. Question: <Question 1>
+           A. Option 1
+           B. Option 2
+           C. Option 3
+           D. Option 4 - correct
+
+        ...continue this exact pattern through question 10. Ensure that each correct answer is marked with '- correct' directly following the correct option.`, info.selectionText, 0, function(response) {
+                showResponseInPopup(response, "AI Quiz");
+            });
+            break;
     }
 });
 
 function showResponseInPopup(text, title) {
+    console.log("Showing response in popup:", text); // for debugging the chatGPT response
     chrome.windows.create({
         url: `popup.html?title=${encodeURIComponent(title)}`,
         type: "popup",
@@ -132,3 +140,4 @@ function showResponseInPopup(text, title) {
         }, 100);
     });
 }
+

@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function formatQuizResponse(text) {
-    console.log("Original text:", text); // Debug: log original text
     var lines = text.split('\n');
     var formattedLines = [];
     var isTenthQuestion = false; // Flag to track if processing the 10th question
@@ -38,8 +37,5 @@ function formatQuizResponse(text) {
         formattedLines.push(line);
     });
     var formattedText = formattedLines.join('\n');
-    console.log("Formatted text:", formattedText); // Debug: log formatted text
     return formattedText;
 }
-
-
