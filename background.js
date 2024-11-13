@@ -1,4 +1,4 @@
-const OPENAI_API_KEY = 'sk-proj-SRGCSAzogrcsQIu2kwiZT3BlbkFJp02fsLG6iUdA7G5kEfKg';
+const OPENAI_API_KEY = 'YOUR_API_KEY';
 
 // Function to setup context menus
 function setupContextMenus() {
@@ -86,12 +86,12 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     }
     switch (info.menuItemId) {
         case "improve-english":
-            callOpenAiApi("You are an English teacher. Rewrite the following to correct grammar, spelling, and clarity.", info.selectionText, 0, function(response) {
+            callOpenAiApi("You are an English teacher. Rewrite the following to correct grammar, spelling, and clarity.", info.selectionText, 0.3, function(response) {
                 showResponseInPopup(response, "Improve English");
             });
             break;
         case "improve-english-creative":
-            callOpenAiApi("You are an English teacher. Rewrite the following to correct grammar, spelling, and clarity. Make it creative and slightly unusual.", info.selectionText, 0.7, function(response) {
+            callOpenAiApi("You are an English teacher. Rewrite the following to correct grammar, spelling, and clarity. Make it creative and slightly unusual.", info.selectionText, 0.9, function(response) {
                 showResponseInPopup(response, "Improve English - Creative");
             });
             break;
